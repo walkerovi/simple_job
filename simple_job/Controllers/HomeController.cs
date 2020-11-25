@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using simple_job.Models;
 
@@ -61,8 +62,34 @@ namespace simple_job.Controllers
 
         public async Task<IActionResult> Jobs()
         {
-            var jobs = _context.job.ToList();
-            return Ok(Task.Run(()=>jobs));
+            var jobs =await _context.job.ToListAsync();
+            return Ok(jobs);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Job(int id)
+        {
+            var job =await _context.job.SingleAsync(d=>d.Id==id);
+            return Ok(job);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateJob(job job)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("some information is not correct");
+            _context.Entry(job).State=EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return Ok("data is updated");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DelateJob(int id)
+        {
+            var job = _context.job.Single(d=>d.Id==id);
+            _context.job.Remove(job);
+            await _context.SaveChangesAsync();
+            return Ok("data is deleted");
         }
     }
 }
