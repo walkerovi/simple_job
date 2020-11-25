@@ -44,13 +44,13 @@ namespace simple_job.Controllers
 
         /*agregados para trabajar*/
         [HttpGet]
-        public async Task<IActionResult> NuevoJob()
-        { 
-            
+        public IActionResult NewJob()
+        {
+            return PartialView();
         }
 
         [HttpPost]
-        public async Task<IActionResult> NuevoJob(job job)
+        public async Task<IActionResult> NewJob(job job)
         {
             if (!ModelState.IsValid)
                 return BadRequest("some information is not correct");
