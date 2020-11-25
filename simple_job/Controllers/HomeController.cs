@@ -12,18 +12,12 @@ namespace simple_job.Controllers
 {
     public class HomeController : Controller
     {
-
+        private readonly ILogger<HomeController> _logger;
         private readonly JobContext _context;
 
-        public HomeController(JobContext context)
+        public HomeController(ILogger<HomeController> logger, JobContext context)
         {
             _context = context;
-        }
-
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
             _logger = logger;
         }
 
@@ -63,14 +57,14 @@ namespace simple_job.Controllers
         public async Task<IActionResult> Jobs()
         {
             var jobs =await _context.job.ToListAsync();
-            return Ok(jobs);
+            return PartialView(jobs);
         }
 
         [HttpGet]
         public async Task<IActionResult> Job(int id)
         {
             var job =await _context.job.SingleAsync(d=>d.Id==id);
-            return Ok(job);
+            return PartialView(job);
         }
 
         [HttpPost]

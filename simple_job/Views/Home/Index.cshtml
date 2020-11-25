@@ -2,7 +2,63 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<p></p>
+<div class="card">
+    <div class="card-header">
+        Board Job
+    </div>
+    <div class="card-body" id="List_Job">
+        
+    </div>
 </div>
+
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="detail">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <script src="~/js/serializer.js"></script>
+    <script src="~/js/alertify.min.js"></script>
+
+<script>
+    $(function () {
+        List_Job();
+    });
+
+
+    function List_Job() {
+        $.get("@Url.Action("Jobs","Home")",
+            function (list) {
+                $("#List_Job").html(list);
+                Show_New_Job();
+        });
+    }
+
+    function Show_New_Job() {
+        $("#Form_New_Job").click(function () {
+            $.get("@Url.Action("NewJob","Home")",
+                function (form) {
+                    $("#detail").html(form);
+            });
+        });
+    }
+
+    function Save_New_Job() {
+
+    }
+</script>
