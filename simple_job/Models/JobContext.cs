@@ -21,7 +21,6 @@ namespace simple_job.Models
 
             modelBuilder.Entity<job>(entity =>
             {
-                entity.HasKey(e => e.Id);
                 entity.Property(e => e.JobTitle).IsRequired();
             });
         }

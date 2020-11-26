@@ -22,20 +22,12 @@
                 </button>
             </div>
             <div class="modal-body" id="detail">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+            </div>            
         </div>
     </div>
 </div>
 
-
-
-    <script src="~/js/serializer.js"></script>
-    <script src="~/js/alertify.min.js"></script>
-
-<script>
+    <script>
     $(function () {
         List_Job();
     });
@@ -46,6 +38,9 @@
             function (list) {
                 $("#List_Job").html(list);
                 Show_New_Job();
+                Show_Edit_Job();
+                Show_Detail_Job();
+                Delete_Job();
         });
     }
 
@@ -53,12 +48,77 @@
         $("#Form_New_Job").click(function () {
             $.get("@Url.Action("NewJob","Home")",
                 function (form) {
+                    $("#exampleModalLabel").text("New Job");
                     $("#detail").html(form);
+                    Save_New_Job();
             });
         });
     }
 
     function Save_New_Job() {
-
+        $("#Save_New_Job").click(function () {
+            var datos = $("#NewJob").serializeAnything();
+            $.post("@Url.Action("NewJob","Home")",
+                datos ,
+                function (result) {
+                    $("#detailModal").modal("hide");
+                    $("#detail").html("");
+                    List_Job();
+                    alertify.success(result);
+                });
+        });
     }
-</script>
+
+    function Show_Edit_Job() {
+        $("a.show_edit_job").each(function (index) {
+            $("a.show_edit_job").eq(index).click(function () {
+                var id = $("input.id_job").val();
+                $.get("@Url.Action("Job","Home")", { id: id }, function (form) {
+                    $("#exampleModalLabel").text("Edit Job");
+                    $("#detail").html(form);
+                    Edit_Job();
+                });
+            });
+        });
+    }
+
+    function Show_Detail_Job() {
+        $("a.show_detail_job").each(function (index) {
+            $("a.show_detail_job").eq(index).click(function () {
+                var id = $("input.id_job").val();
+                $.get("@Url.Action("DetailJob","Home")", { id: id }, function (form) {
+                    $("#exampleModalLabel").text("Detail Job");
+                    $("#detail").html(form);
+                    Edit_Job();
+                });
+            });
+        });
+    }
+
+    function Edit_Job() {
+        $("#Update_Job").click(function () {
+            var datos = $("#Detail_Job").serializeAnything();
+            $.post("@Url.Action("UpdateJob", "Home")",
+                datos ,
+                function (result) {
+                    $("#detailModal").modal("hide");
+                    $("#detail").html("");
+                    List_Job();
+                    alertify.success(result);
+                });
+        });
+        }
+
+        function Delete_Job() {
+            $("a.show_delate_job").each(function (index) {
+            $("a.show_delate_job").eq(index).click(function () {
+                var id = $("input.id_job").val();
+                $.get("@Url.Action("DelateJob","Home")", { id: id }, function (result) {
+                    alertify.success(result);
+                    List_Job();
+                });
+            });
+        });
+    }
+
+    </script>

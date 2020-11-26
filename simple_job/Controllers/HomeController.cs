@@ -47,8 +47,7 @@ namespace simple_job.Controllers
         [HttpPost]
         public async Task<IActionResult> NewJob(job job)
         {
-            if (!ModelState.IsValid)
-                return BadRequest("some information is not correct");
+            job.Id = 0;
             _context.Add(job);
             await _context.SaveChangesAsync();
             return Ok("innformation is saved");
@@ -67,11 +66,16 @@ namespace simple_job.Controllers
             return PartialView(job);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> DetailJob(int id)
+        {
+            var job = await _context.job.SingleAsync(d => d.Id == id);
+            return PartialView(job);
+        }
+
         [HttpPost]
         public async Task<IActionResult> UpdateJob(job job)
         {
-            if (!ModelState.IsValid)
-                return BadRequest("some information is not correct");
             _context.Entry(job).State=EntityState.Modified;
             await _context.SaveChangesAsync();
             return Ok("data is updated");
